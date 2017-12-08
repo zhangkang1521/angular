@@ -5,21 +5,48 @@
                 <label>用户名</label>
             </div>
             <div nz-col [nzSpan]="3" >
-                <nz-input [(ngModel)]="username" name="username"></nz-input>
+                <nz-input [(ngModel)]="userParam.username" name="username"></nz-input>
             </div>
-
+            <div nz-form-label nz-col [nzSpan]="1">
+                <label>生日</label>
+            </div>
+            <div nz-col [nzSpan]="6">
+                    <nz-datepicker [(ngModel)]="userParam.birthdayBegin" name="birthdayBegin"></nz-datepicker>
+                    <i class="anticon anticon-minus"></i>
+                    <nz-datepicker [(ngModel)]="userParam.birthdayEnd" name="birthdayEnd"></nz-datepicker>
+            </div>
+           
             <div nz-col [nzSpan]="3">
-                <button nz-button [nzType]="'primary'" (click)="page.number=1;search();">
+                <button nz-button [nzType]="'primary'" (click)="search(1);">
                     <span>查询</span>
                 </button>
             </div> 
         </div>
+        
+       
     </div>
 </form>
-<nz-table #nzTable [nzAjaxData]="page.content" [(nzPageSize)]="page.size" [(nzPageIndex)]="page.number" [nzTotal]="page.totalElements" [nzShowTotal]="true" [nzShowSizeChanger]="true"
-     (nzPageIndexChange)="pageChange()" (nzPageSizeChange)="pageChange()">
+<div class="panel">
+    <div nz-row [nzGutter]="4">
+        <div nz-form-item>
+            <div nz-col [nzSpan]="1">
+                <button nz-button [nzType]="'primary'" (click)="_operateData()">新增</button>
+            </div>
+            <div nz-col [nzSpan]="1">
+                <button nz-button [nzType]="'danger'" (click)="delete()" [disabled]="disabledButton">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+<nz-table #nzTable [nzAjaxData]="_content" [(nzPageSize)]="_pageSize" [(nzPageIndex)]="_pageIndex" [nzTotal]="_totalElements"
+ [nzShowTotal]="true" [nzShowSizeChanger]="true" [nzLoading]="_isLoading"
+     (nzPageIndexChangeClick)="pageChange($event)" (nzPageSizeChange)="pageChange()">
     <thead nz-thead>
       <tr>
+        <th nz-th nzCheckbox>
+            <label nz-checkbox [(ngModel)]="_allChecked" (ngModelChange)="_checkAll($event)">
+            </label>
+        </th>
         <th nz-th><span>用户名</span></th>
         <th nz-th><span>年龄</span></th>
         <th nz-th><span>生日</span></th>
@@ -28,11 +55,19 @@
     </thead>
     <tbody nz-tbody>
       <tr nz-tbody-tr *ngFor="let data of nzTable.data">
+        <td nz-td nzCheckbox>
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
+            </label>
+        </td>
         <td nz-td>{{data.username}}</td>
         <td nz-td>{{data.age}}</td>
         <td nz-td>{{data.birthday | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         <td nz-td>
-          
+          <a>编辑</a>
+          <span nz-table-divider></span>
+          <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="doDelete(data.id)">
+            <a nz-popconfirm>删除</a>
+         </nz-popconfirm>
         </td>
       </tr>
     </tbody>

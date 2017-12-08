@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import {Subject, Observable} from "rxjs";
-import {NzMessageService} from 'ng-zorro-antd';
-// import { Page } from '../../common/page';
+import {NzMessageService, NzModalService} from 'ng-zorro-antd';
+import { UserParam } from './user';
 
 @Component({
     selector: 'user',
@@ -12,49 +12,100 @@ import {NzMessageService} from 'ng-zorro-antd';
 })
 
 export class UserComponent implements OnInit {
+    
+    _isLoading = false; // 分页数据是否加载中
+    _pageIndex = 1; // 页码，从1开始
+    _pageSize = 10; // 分页大小
 
-    username = '';
+    _content = [];     // 列表数据
+    _totalElements = 0; // 总条数
 
-    page = {
-        content : [],
-        first : true,
-        last : false,
-        number : 1, // 第几页，后台返回从0开始
-        numberOfElements : 0,
-        size : 10, // 分页大小
-        totalElements : 0, // 总条数
-        totalPages : 0
-    };
+    _allChecked = false; // 是否全部选中
 
-    subject = new Subject();
+
+
+    userParam: UserParam = new UserParam();
+
+    disabledButton = true;
 
     constructor(private userService:UserService,
-        private _message: NzMessageService) { }
+        private _message: NzMessageService,
+        private confirmServ: NzModalService) { }
 
     ngOnInit() {
-        this.search();
+        // this.search();
     }
 
-    search() {
+    search(pageIndex?) {
+        if (pageIndex) {
+            this._pageIndex = pageIndex;
+        }
         let pageReq = {
-            pageNo: this.page.number,
-            pageSize: this.page.size,
-            param: {}
+            pageNo: this._pageIndex,
+            pageSize: this._pageSize,
+            param: this.userParam
         }
         // TODO　debounce
+        this._isLoading = true;
         var obs = this.userService.queryList(pageReq).subscribe(res => {
             if (res.success) {
-                this.page = res.data;
-                this.page.number++;
+                let data = res.data;
+                this._totalElements = data.totalElements;
+                this._content = data.content;
+                this._refreshStatus();
+               
             } else {
                 this._message.create('error', res.message);
             }
-            
+            this._isLoading = false;
+        }, err => {
+            this._isLoading = false;
+            this._message.create('error', err.message);
+            console.log(err);
         });
     }
 
-    pageChange() {
-        // TODO 到最后一页，然后将pageSize调大，发起多次请求
-        this.search();
+    pageChange($event?) {
+        this.search($event);
+    }
+
+    delete() {
+        let ids = this._content
+        .filter(data => data.checked === true)
+        .map(data => data.id);
+        this.confirmServ.confirm({
+            content: '确定要删除',
+            showConfirmLoading: true,
+            onOk() {
+              console.log(ids);
+            },
+            onCancel() {
+            }
+          });
+    }
+
+    doDelete(ids) {
+        console.log(ids);
+    }
+
+    
+    _refreshStatus() {
+        const allChecked = this._content.every(value => value.checked === true);
+        const allUnChecked = this._content.every(value => !value.checked);
+        this._allChecked = allChecked;
+        this.disabledButton = !this._content.some(value => value.checked);
+    }
+
+    _checkAll(value) {
+        if (value) {
+            this._content.forEach(data => {
+                data.checked = true;
+            });
+        } else {
+            this._content.forEach(data => {
+                data.checked = false;
+            });
+        }
+        this._refreshStatus();
     }
 }
