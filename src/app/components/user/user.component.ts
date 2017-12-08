@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import {Subject, Observable} from "rxjs";
-import {NzMessageService, NzModalService} from 'ng-zorro-antd';
+import { Subject, Observable } from "rxjs";
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { UserParam } from './user';
 
 @Component({
     selector: 'user',
     templateUrl: './user.component.html',
-    styleUrls: ['./user.component.css'],
-    providers: [UserService]
+    styleUrls: ['./user.component.css']
 })
 
 export class UserComponent implements OnInit {
-    
+
     _isLoading = false; // 分页数据是否加载中
     _pageIndex = 1; // 页码，从1开始
     _pageSize = 10; // 分页大小
@@ -28,12 +27,12 @@ export class UserComponent implements OnInit {
 
     disabledButton = true;
 
-    constructor(private userService:UserService,
+    constructor(private userService: UserService,
         private _message: NzMessageService,
         private confirmServ: NzModalService) { }
 
     ngOnInit() {
-        // this.search();
+        this.search();
     }
 
     search(pageIndex?) {
@@ -53,7 +52,7 @@ export class UserComponent implements OnInit {
                 this._totalElements = data.totalElements;
                 this._content = data.content;
                 this._refreshStatus();
-               
+
             } else {
                 this._message.create('error', res.message);
             }
@@ -70,25 +69,34 @@ export class UserComponent implements OnInit {
     }
 
     delete() {
-        let ids = this._content
-        .filter(data => data.checked === true)
-        .map(data => data.id);
+        let ids = this._content.filter(data => data.checked === true).map(data => data.id);
         this.confirmServ.confirm({
             content: '确定要删除',
-            showConfirmLoading: true,
-            onOk() {
-              console.log(ids);
-            },
-            onCancel() {
+            onOk: () => {
+                this.doDeleteBatch(ids);
             }
-          });
+            
+        });
     }
 
-    doDelete(ids) {
-        console.log(ids);
+    doDeleteBatch(ids) {
+        this._message.error('删除失败');
     }
 
-    
+    doDelete(id) {
+        this.userService.delete(id).subscribe(res => {
+            if (res.success) {
+                this._message.success('删除成功！');
+            } else {
+                this._message.error(res.message);
+            }
+            this.search();
+        }, err => {
+            this._message.error(err.message);
+        })
+    }
+
+
     _refreshStatus() {
         const allChecked = this._content.every(value => value.checked === true);
         const allUnChecked = this._content.every(value => !value.checked);

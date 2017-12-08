@@ -34,7 +34,7 @@
     <div nz-row [nzGutter]="4">
         <div nz-form-item>
             <div nz-col [nzSpan]="1">
-                <button nz-button [nzType]="'primary'" (click)="_operateData()">新增</button>
+                <button nz-button [nzType]="'primary'" routerLink="/user/add">新增</button>
             </div>
             <div nz-col [nzSpan]="1">
                 <button nz-button [nzType]="'danger'" (click)="delete()" [disabled]="disabledButton">删除</button>
@@ -67,7 +67,7 @@
         <td nz-td>{{data.age}}</td>
         <td nz-td>{{data.birthday | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
         <td nz-td>
-          <a>编辑</a>
+          <a routerLink="/user/edit/{{data.id}}">编辑</a>
           <span nz-table-divider></span>
           <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="doDelete(data.id)">
             <a nz-popconfirm>删除</a>
