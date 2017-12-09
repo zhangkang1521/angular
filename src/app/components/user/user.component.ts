@@ -98,10 +98,15 @@ export class UserComponent implements OnInit {
 
 
     _refreshStatus() {
-        const allChecked = this._content.every(value => value.checked === true);
-        const allUnChecked = this._content.every(value => !value.checked);
-        this._allChecked = allChecked;
-        this.disabledButton = !this._content.some(value => value.checked);
+        if (this._content && this._content.length > 0) {
+            const allChecked = this._content.every(value => value.checked === true);
+            const allUnChecked = this._content.every(value => !value.checked);
+            this._allChecked = allChecked;
+            this.disabledButton = !this._content.some(value => value.checked);
+        } else {
+            this._allChecked = false;
+            this.disabledButton = true;
+        }
     }
 
     _checkAll(value) {

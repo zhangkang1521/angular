@@ -1,12 +1,9 @@
-.ant-advanced-search-form {
+.search-panel {
     padding: 24px;
     /* background: #f7f7f7; */
     border: 1px solid #d9d9d9;
-    /* border-radius: 6px; */
+    border-radius: 6px;
   }
-.panel {
+.tool-bar {
   padding: 10px;
-  /* background: #f0f0f0; */
-  /* border: 1px solid #d9d9d9; */
-  /* border-radius: 6px; */
 }

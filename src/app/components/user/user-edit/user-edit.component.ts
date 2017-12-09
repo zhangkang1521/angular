@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Location } from '@angular/common';
+import { User } from '../user';
 
 @Component({
   selector: 'app-user-edit',
@@ -12,7 +13,7 @@ import { Location } from '@angular/common';
 })
 export class UserEditComponent implements OnInit {
 
-  user = {};
+  user = new User();
 
   validateForm: FormGroup;
 

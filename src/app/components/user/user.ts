@@ -3,3 +3,10 @@ export class UserParam {
     birthdayBegin = null;
     birthdayEnd = null;
 }
+
+export class User {
+    id;
+    username;
+    age;
+    birthday = null;
+}
