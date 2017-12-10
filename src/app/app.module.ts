@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
+import { Routes, RouterModule } from '@angular/router';
 
 
 import { AppComponent } from './app.component';
@@ -13,6 +14,8 @@ import { ContactHighlightDirective } from './contact/contact-highlight.directive
 import { AwesomePipe } from './contact/awesome.pipe';
 import { ContactService } from './contact/contact.service';
 import { ContactModule } from './contact/contact.module';
+import { AppRoutingModule } from './app-routing.module';
+import { HeroModule } from './hero/hero.module';
 
 
 @NgModule({
@@ -25,7 +28,7 @@ import { ContactModule } from './contact/contact.module';
   imports: [
     BrowserModule,
     FormsModule,
-    ContactModule
+    AppRoutingModule
   ],
   providers: [
     UserService
