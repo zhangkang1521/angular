@@ -12,6 +12,7 @@ import { ContactComponent } from './contact/contact.component';
 import { ContactHighlightDirective } from './contact/contact-highlight.directive';
 import { AwesomePipe } from './contact/awesome.pipe';
 import { ContactService } from './contact/contact.service';
+import { ContactModule } from './contact/contact.module';
 
 
 @NgModule({
@@ -19,17 +20,15 @@ import { ContactService } from './contact/contact.service';
     AppComponent,
     HighlightDirective,
     TitleComponent,
-    ContactComponent,
-    ContactHighlightDirective,
-    AwesomePipe
+   
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ContactModule
   ],
   providers: [
-    UserService,
-    ContactService
+    UserService
   ],
   bootstrap: [AppComponent]
 })
