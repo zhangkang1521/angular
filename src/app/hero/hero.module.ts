@@ -3,14 +3,12 @@ import { CommonModule } from '@angular/common';
 import { HeroListComponent } from './hero-list/hero-list.component';
 import { RouterModule } from '@angular/router';
 import { HeroEditComponent } from './hero-edit/hero-edit.component';
+import { HeroRoutingModule } from './hero-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      { path: '', component: HeroListComponent},
-      { path: 'add', component: HeroEditComponent},
-    ])
+    HeroRoutingModule
   ],
   declarations: [HeroListComponent, HeroEditComponent]
 })

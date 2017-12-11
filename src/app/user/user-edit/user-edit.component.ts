@@ -36,17 +36,17 @@ export class UserEditComponent implements OnInit {
         birthday: [null, [Validators.required]]
       });
   
-      // let action = this.route.snapshot.url[1].path;
-      // if (action === 'edit') {
-      //   const id = +this.route.snapshot.paramMap.get('id');
-      //   this.userService.findOne(id).subscribe(res => {
-      //     if (res.success) {
-      //       this.user = res.data;
-      //     }
-      //   });
-      // } else if (action === 'add') {
+      let action = this.route.snapshot.url[0].path;
+      if (action === 'edit') {
+        const id = +this.route.snapshot.paramMap.get('id');
+        this.userService.findOne(id).subscribe(res => {
+          if (res.success) {
+            this.user = res.data;
+          }
+        });
+      } else if (action === 'add') {
   
-      // }
+      }
   
   
     }

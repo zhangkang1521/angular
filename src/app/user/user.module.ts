@@ -6,6 +6,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from './user.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { UserRoutingModule } from './user-routing.module';
 
 
 @NgModule({
@@ -14,11 +15,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
     FormsModule,
     ReactiveFormsModule,
     NgZorroAntdModule,
-    RouterModule.forChild([
-      { path: '', component: UserListComponent },
-      { path: 'add', component: UserEditComponent },
-      { path: 'edit/:id', component: UserEditComponent }
-    ])
+    UserRoutingModule
   ],
   declarations: [UserListComponent, UserEditComponent],
   providers: [ UserService ]
