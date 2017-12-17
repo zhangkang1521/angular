@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
+import { Router } from "@angular/router";
+import { HttpClient } from '@angular/common/http';
 
 const URL = 'http://localhost:9999/spring-boot/user/upload';
 
@@ -9,15 +11,28 @@ const URL = 'http://localhost:9999/spring-boot/user/upload';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public uploader:FileUploader = new FileUploader({url: URL});
-  public hasBaseDropZoneOver:boolean = false;
-  public hasAnotherDropZoneOver:boolean = false;
- 
-  public fileOverBase(e:any):void {
-    this.hasBaseDropZoneOver = e;
+
+  private files;
+
+  constructor(private http: HttpClient
+   ) { }
+
+  ngOnInit() {
+
+  }
+
+  filechange(event) {
+    console.log(event);
+    this.files = event.srcElement.files;
   }
  
-  public fileOverAnother(e:any):void {
-    this.hasAnotherDropZoneOver = e;
-  }
+  submit(t) {
+      let formData: FormData = new FormData();
+      formData.append("username", "zk");
+      formData.append('myFile', this.files[0]);
+      this.http.post('http://localhost:9999/spring-boot/user/upload2', formData).subscribe(res => {
+        console.log(res);
+      });
+    }
+
 }
